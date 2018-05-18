@@ -228,25 +228,14 @@ IF (SBOL_BUILD_PYTHON3)
                     sbol64)
             ENDIF()
 
-            file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
-            file(MAKE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR}/test)
+	    include( FindPythonInterp )
             set_target_properties(_libsbol PROPERTIES OUTPUT_NAME "_libsbol")
-            add_custom_command(TARGET _libsbol PRE_BUILD
-                               COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
-            add_custom_command(TARGET _libsbol PRE_BUILD
-                               COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/CRISPR_example.py ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
-            add_custom_command(TARGET _libsbol PRE_BUILD
-                               COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/crispr_example.xml ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
-            add_custom_command(TARGET _libsbol PRE_BUILD
-                               COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/sbol.py ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
-            add_custom_command(TARGET _libsbol PRE_BUILD
-                               COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/unit_tests.py ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
-            add_custom_command(TARGET _libsbol PRE_BUILD
-                               COMMAND cp -r ${PROJECT_SOURCE_DIR}/test/SBOLTestSuite/* ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR}/test)
-            add_custom_command(TARGET _libsbol POST_BUILD
-                               COMMAND cp -r ${CMAKE_SWIG_OUTDIR}/libsbol.py ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
-            add_custom_command(TARGET _libsbol POST_BUILD
-                               COMMAND cp -r ${CMAKE_SWIG_OUTDIR}/_libsbol.so ${CMAKE_INSTALL_PREFIX}/wrapper/${PYSBOL_TARGET_DIR})
+	    set(PYTHON_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib64/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/${PYSBOL_TARGET_DIR})
+	    install(FILES __init__.py CRISPR_example.py crispr_example.xml sbol.py unit_tests.py ${CMAKE_SWIG_OUTDIR}/libsbol.py ${CMAKE_SWIG_OUTDIR}/_libsbol.so
+	            DESTINATION ${PYTHON_INSTALL_PATH})
+	    install(DIRECTORY ${SBOL_TEST_DIR}/SBOLTestSuite/ DESTINATION ${PYTHON_INSTALL_PATH}/test
+	            PATTERN ".git*" EXCLUDE
+		    PATTERN ".travis.yml" EXCLUDE)
         endif()
     else()
         ##### Python 3 for Windows 32x #####
