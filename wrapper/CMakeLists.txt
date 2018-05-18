@@ -230,7 +230,7 @@ IF (SBOL_BUILD_PYTHON3)
 
 	    include( FindPythonInterp )
             set_target_properties(_libsbol PROPERTIES OUTPUT_NAME "_libsbol")
-	    set(PYTHON_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/${PYSBOL_TARGET_DIR})
+	    set(PYTHON_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages/${PYSBOL_TARGET_DIR})
 	    install(FILES __init__.py CRISPR_example.py crispr_example.xml sbol.py unit_tests.py ${CMAKE_SWIG_OUTDIR}/libsbol.py ${CMAKE_SWIG_OUTDIR}/_libsbol.so
 	            DESTINATION ${PYTHON_INSTALL_PATH})
 	    install(DIRECTORY ${SBOL_TEST_DIR}/SBOLTestSuite/ DESTINATION ${PYTHON_INSTALL_PATH}/test
